@@ -1,12 +1,14 @@
 # uArm Swift Pro - Python Library
 # Created by: Richard Garsthagen - the.anykey@gmail.com
-# V0.1 - June 2017 - Still under development
+# V0.2 - June 2017 - Still under development
 
 import serial
 import time
 import protocol_swiftpro as protocol
 import threading
 import sys
+import math
+from math import pi
 
 
 class robot:
@@ -105,6 +107,38 @@ class robot:
         # 3= Universal holder
         cmd = protocol.SET_MODE.format(modeid)
         self.sendcmd(cmd,True)
+
+    @staticmethod
+    def PointsInCircum(r,n):
+        return [(math.cos(2*pi/n*x)*r,math.sin(2*pi/n*x)*r) for x in xrange(0,n+1)]
+
+
+    def drawCircle(self, centerX, centerY, Radius, Resolution, Speed, DrawingHeight, StartFinishedHeight):
+        if (Resolution < 4):
+            #ignore drwaing circle, to low resoution
+            if (self.debug): print ("Ignoring drwaing circle, to low resolution requested")
+            return
+        if (self.debug): print ("Drwaing circle of {} radius in {} steps".format(Radius,Resolution))
+        offsetx = centerX
+        offsety = centerY 
+        c = self.PointsInCircum(Radius,Resolution)
+        bx,by = c[0]
+        self.goto(offsetx+bx,offsety+by,StartFinishedHeight,Speed)
+
+        for p in range(0,Resolution):
+            x,y = c[p]
+            self.goto(offsetx+x,offsety+y,DrawingHeight,Speed)
+
+        self.goto(offsetx+bx,offsety+by,DrawingHeight,Speed)
+        time.sleep(0.5)
+        self.goto(offsetx+bx,offsety+by,StartFinishedHeight,Speed)
+
+        
+        
+            
+
+            
+        
 
         
 
