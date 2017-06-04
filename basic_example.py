@@ -9,11 +9,9 @@ import time
 serialport = "com3"          # for windows 
 #serialport = "/dev/ttyACM0"  # for linux like system
 
-#  Enable / Disable debug output on screen, by default disabled
-#bot1.debug = True
-
 # Connect to uArm 
 myRobot = uArmRobot.robot(serialport)
+myRobot.debug = False   # Enable / Disable debug output on screen, by default disabled
 myRobot.connect()
 myRobot.mode(0)   # Set mode to Normal
 
