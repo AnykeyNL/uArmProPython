@@ -1,4 +1,5 @@
 # Example made by OssiLehtinen
+#
 
 from svgpathtools import svg2paths, wsvg
 import numpy as np
