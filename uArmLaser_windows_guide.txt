@@ -1,0 +1,93 @@
+
+Download and install Python:
+
+https://www.python.org/downloads/windows/
+
+I picked the 3.6.2 x86-64 version.
+
+Set your 'path' environment variable to include your python path:
+
+1. Start menu -> Edit environment variables for your account
+2. Double click on Path
+3. Add two new lines with:
+	C:\Users\YOUR_USER_NAME\AppData\Local\Programs\Python\Python36
+	C:\Users\YOUR_USER_NAME\AppData\Local\Programs\Python\Python36\Scripts
+	
+	Note, change the user name to yours, and also otherwise check that the path is where you have python installed.
+	
+	
+	
+	
+	
+Install python extensions:
+
+1. Start command prompt: Start-menu -> Command prompt
+2. Run commands:
+	pip install pyserial
+	pip install svgpathtools
+	pip install svgwrite
+	pip install numpy
+	pip install pillow
+
+
+
+
+Download and install imagemagick:
+
+https://www.imagemagick.org/script/binary-releases.php
+
+I picked version ImageMagick-7.0.6-0-Q16-x64-dll.exe. Default options.
+
+
+
+Download and install node.js:
+
+https://nodejs.org/en/download/
+
+I went for the 64-bit Windows installer. Default options.
+
+
+
+Install the svgo extension to node.js:
+Launch command prompt again:
+	npm install -g svgo
+
+
+
+	
+Download the py-scripts from 
+https://github.com/OssiLehtinen/uArm
+
+Click 'Clone or Download' -> Download zip
+Open the downloaded archive and copy the contents somewhere such as C:/Users/YOUR_USER_NAME/uArm/
+
+
+
+
+Make svgo discoverable from python. Not pretty at all, so if someone has better ideas...
+	
+1. Open uArmLaserRobot.py in an text editor. This is where you jsut copied the stuff from GitHub to. Right click on the file and go to Edit with IDLE
+2. Locate lines with 
+
+            call(["node", "C:/Users/oswald/AppData/Roaming/npm/node_modules/svgo/bin/svgo", filename, "-o", self.temp_folder + "/clean.svg"])
+
+3. Modify the C:/Users/.../svgo/bin/svgo path to where the svgo binary is located on your system. Probably just changing the username from oswald to yours is enough for most people.
+4. Save	the file
+
+
+
+Test run:
+
+1. open laser_draw_example.py in IDLE
+2. Run menu -> Run Module
+
+If you get error messages about ports or what not, you need to find the correct serial port for your device (set at "com4" atm)
+1. Start menu -> devices
+2. Locate Arduino Mega 2560 and see what com-port is given on that line and edit the py-script accordingly.
+
+
+To draw other images, set the filename from "bird.svg" to what you wish to draw and go from there. You can also play around with the variables set in the script, such as x_offset and what not.
+
+
+
+Good luck and have fun ;)
