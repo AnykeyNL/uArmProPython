@@ -7,6 +7,7 @@
 READY                   = "@1"
 OK                      = "OK"
 SET_POSITION            = "G0 X{} Y{} Z{} F{}"
+SET_POSITION_LASER      = "G1 X{} Y{} Z{} F{}"
 SET_POSITION_RELATIVE   = "G2204 X{} Y{} Z{} F{}"
 SIMULATION              = "M2222 X{} Y{} Z{} P0"
 GET_FIRMWARE_VERSION    = "P2203"
