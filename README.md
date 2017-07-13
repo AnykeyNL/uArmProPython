@@ -1,6 +1,6 @@
 
 # uArmProPython
-uArm Swift Pro robot arm Python library and example code snippets. Based on a fork from Richar Gasthaagen's repository
+uArm Swift Pro robot arm Python library and example code snippets. Based on a fork from Richar Gasthaagen's repository.
 
 Note 1: The svgo and convert binaries are external to Python. Meaning, you need to install imagemagick and node.js on your system (e.g., sudo apt-get install imagemagick npm) and the svgo command for node.js (npg install -g svgo). These functionalities were tested on Kubuntu Linux 16.04. Installation instructions for Windows can be found in the file uArmLaser_windows_guide.txt.
 
