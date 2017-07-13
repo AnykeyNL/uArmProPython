@@ -1,10 +1,10 @@
 import uArmLaserRobot
 
-mode = 0
+mode = 1
 
 steps_per_seg = 10
 x_offset = 170
-height = -11
+height = 150
 draw_speed = 100
 targetWidth = 20
 lineSpacing = 1.0
