@@ -11,6 +11,7 @@
 import uArmRobot
 import protocol_swiftpro as protocol
 from svgpathtools import svg2paths2, wsvg
+from svgpathtools.path import Line
 import numpy as np
 import time
 from PIL import Image  
@@ -80,9 +81,16 @@ class laserRobot(uArmRobot.robot):
             if('stroke' in attribute or 'class' in attribute):
                 for seg in path:
                     segcoords = []
-                    for p in range(steps_per_seg+1):
-                        cp = seg.point(float(p)/float(steps_per_seg))
-                        segcoords.append([scale*(np.real(cp)-xmin)+xOffset, scale*(np.imag(cp)-ymin) - scale*((ymax-ymin)/2.0)])
+		    # no need to create segments, if we already have a Line.
+		    if isinstance(seg, Line):
+			cp = seg.start
+			segcoords.append([scale*(np.real(cp)-xmin)+xOffset, scale*(np.imag(cp)-ymin) - scale*((ymax-ymin)/2.0)])
+			cp = seg.end
+			segcoords.append([scale*(np.real(cp)-xmin)+xOffset, scale*(np.imag(cp)-ymin) - scale*((ymax-ymin)/2.0)])
+		    else:
+                        for p in range(steps_per_seg+1):
+                            cp = seg.point(float(p)/float(steps_per_seg))
+                            segcoords.append([scale*(np.real(cp)-xmin)+xOffset, scale*(np.imag(cp)-ymin) - scale*((ymax-ymin)/2.0)])
                     coords.append(segcoords)
         
         return coords
