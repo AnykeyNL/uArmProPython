@@ -1,6 +1,8 @@
 # uArmProPython
 Python Library for the uArm swift Pro robot arm
+
 Created by: Richard Garsthagen - the.anykey@gmail.com
+
 V0.3 - June 2018 - Still under development !!
 
 See the 2 examples files on how to use the library.
