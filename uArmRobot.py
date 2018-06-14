@@ -1,6 +1,8 @@
 # uArm Swift Pro - Python Library
 # Created by: Richard Garsthagen - the.anykey@gmail.com
-# V0.2 - June 2017 - Still under development
+# V0.3 - June 2018 - Still under development
+#
+# Support for the old and new firmware
 
 import serial
 import time
@@ -20,13 +22,17 @@ class robot:
     debug = False
     baseThreadCount = threading.activeCount()
     delay_after_move = 0.1
+    version = 0
+    threads = 0
     
-    def __init__(self, serialport):
+    def __init__(self, serialport, version):
         self.serialport = serialport
         self.connected = False
         robot.num_of_robots += 1
         self.moving = False
         self.pumping = False
+        self.limit = False
+        self.version = version
 
     def connect(self):
         try:
@@ -38,13 +44,24 @@ class robot:
             while (not Ready):
                 line = self.ser.readline()
                 if (self.debug): print (line)
-                if line.startswith("@5"):
+                
+                if line.startswith("@5") and self.version ==0 :
+                    Ready = True
+                    self.connected = True
+                    if (self.debug): print ("Connected!")
+                    return True
+
+                if line.startswith("@1") and self.version == 1 :
                     Ready = True
                     self.connected = True
                     if (self.debug): print ("Connected!")
                     return True
             line = self.ser.readline() # Ignore if @6 response is given
-            print (line)
+            if line.startswith("@6 N0 V1"):
+                self.limit = True
+            if line.startswith("@6 N0 V0"):
+                self.limit = False
+            #print (line)
                         
         except Exception as e:
             if (self.debug): print ("Error trying to connect to: " + self.serialport + " - " + str(e))
@@ -60,6 +77,7 @@ class robot:
             if (self.debug): print ("Disconnected called while not connected")
 
     def sendcmd(self, cmnd, waitresponse):
+        self.threads = self.threads + 1
         if (self.connected):
             id = self.serid
             self.serid += 1
@@ -69,17 +87,25 @@ class robot:
             self.ser.write(cmndString)
             if (waitresponse):
                 line = self.ser.readline()
-                while not line.startswith("$" + str(id)):
+                if (self.debug): print ("Serial received: {}".format(line))
+                while line.find("$" + str(id)) == -1:
+                    if line.startswith("@6 N0 V1"):
+                        self.limit = True
+                    if line.startswith("@6 N0 V0"):
+                        self.limit = False
                     line = self.ser.readline()
+                    if (self.debug): print ("Serial received: {}".format(line))
                 if (self.debug): print ("Response {}".format(line))
                 if (self.moving):
                     self.moving = False
                     time.sleep(self.delay_after_move)
+                self.threads = self.threads -1
                 return line
         else:
             if (self.debug):
                 print ("error, trying to send command while not connected")
                 self.moving = False
+                self.threads = self.threads -1
 
     def goto(self,x,y,z,speed):
         self.moving = True
@@ -87,13 +113,28 @@ class robot:
         y = str(round(y, 2))
         z = str(round(z, 2))
         s = str(round(speed, 2))
-        cmd = protocol.SET_POSITION.format(x,y,z,s)
+        if self.version == 0:
+            cmd = protocol.SET_POSITION.format(x,y,z,s)
+        if self.version == 1:
+            cmd = protocol.SET_POSITION_L.format(x,y,z,s)
         self.sendcmd(cmd, True)
+        self.moving = False
+
+    def movedown(self,speed):
+        self.moving = True
+        z = str(round(-1, 2))
+        s = str(round(speed, 2))
+        cmd = protocol.SET_POSITION_RELATIVE.format(0,0,z,s)
+        self.sendcmd(cmd, True)
+        self.moving = False
 
     def async_goto(self,x,y,z, speed):
         self.moving = True
         t = threading.Thread( target=self.goto , args=(x,y,z,speed) )
+        while self.threads != 0:
+            time.sleep(0.05)
         t.start()
+        
 
     def pump(self, state):
         self.pumping = state

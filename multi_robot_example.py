@@ -1,6 +1,8 @@
 # uArm Swift Pro - Python Library Example
 # Created by: Richard Garsthagen - the.anykey@gmail.com
-# V0.1 - June 2017 - Still under development
+# V0.3 - June 2018 - Still under development
+#
+# Use Python 2.x!
 
 import uArmRobot
 import time
@@ -9,8 +11,8 @@ bots = 2
 
 #Configure Serial Port
 myRobot = []
-myRobot.append(uArmRobot.robot("com3"))
-myRobot.append(uArmRobot.robot("com4"))
+myRobot.append(uArmRobot.robot("com3",0)) # user 0 for firmware < v4 and use 1 for firmware v4
+myRobot.append(uArmRobot.robot("com4",0)) # user 0 for firmware < v4 and use 1 for firmware v4
 
 
 

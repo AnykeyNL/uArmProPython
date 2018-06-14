@@ -1,12 +1,13 @@
 # uArm Swift Pro - Python Library - protocol commands
 # Created by: Richard Garsthagen - the.anykey@gmail.com
-# V0.1 - June 2017 - Still under development
+# V0.3 - June 2018 - Still under development
 
 
 ## PROTOCOL MESSAGE
 READY                   = "@1"
 OK                      = "OK"
 SET_POSITION            = "G0 X{} Y{} Z{} F{}"
+SET_POSITION_L          = "G1 X{} Y{} Z{} F{}"
 SET_POSITION_RELATIVE   = "G2204 X{} Y{} Z{} F{}"
 SIMULATION              = "M2222 X{} Y{} Z{} P0"
 GET_FIRMWARE_VERSION    = "P2203"
