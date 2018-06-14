@@ -18,9 +18,11 @@ See the 2 examples files on how to use the library.
 More to follow :-)
 
 Using the initialization, you can specify the firmware of yor robot.
+
 myRobot = uArmRobot.robot(serialport,1)
 
 where 
+
 0 = Firmware V1,v2,v3
 1 = Firmware V4
 
