@@ -24,7 +24,10 @@ class robot:
     delay_after_move = 0.1
     version = 0
     threads = 0
-    
+    X = float(200)
+    Y = float(0)
+    Z = float(100)
+        
     def __init__(self, serialport, version):
         self.serialport = serialport
         self.connected = False
@@ -96,6 +99,14 @@ class robot:
                     line = self.ser.readline()
                     if (self.debug): print ("Serial received: {}".format(line))
                 if (self.debug): print ("Response {}".format(line))
+                if line.find("X") != -1 and line.find("Y") != -1 and line.find("Z") != -1:
+                    try:
+                        rit, stat, X, Y, Z = line.split(" ")
+                        self.X = float(X[1:])
+                        self.Y = float(Y[1:])
+                        self.Z = float(Z[1:])
+                    except:
+                        if (self.debug): print ("Incorrect coordinate response")
                 if (self.moving):
                     self.moving = False
                     time.sleep(self.delay_after_move)
@@ -134,8 +145,11 @@ class robot:
         while self.threads != 0:
             time.sleep(0.05)
         t.start()
-        
 
+    def get_coor(self):
+        cmd= protocol.GET_COOR
+        self.sendcmd(cmd, True)
+        
     def pump(self, state):
         self.pumping = state
         cmd = protocol.SET_PUMP.format(int(state))
@@ -148,6 +162,15 @@ class robot:
         # 3= Universal holder
         cmd = protocol.SET_MODE.format(modeid)
         self.sendcmd(cmd,True)
+
+    def motors_on(self, state):
+        if state == True:
+            cmd= protocol.ATTACH_MOTORS
+            self.sendcmd(cmd, True)
+        if state == False:
+            cmd= protocol.DETACH_MOTORS
+            self.sendcmd(cmd, True)
+            
 
     @staticmethod
     def PointsInCircum(r,n):
