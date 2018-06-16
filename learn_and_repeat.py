@@ -8,7 +8,7 @@ import uArmRobot
 import time
 
 points = []
-totalP = 4
+totalP = 5
 speed = 80
 
 #Configure Serial Port
@@ -20,11 +20,13 @@ myRobot = uArmRobot.robot(serialport,1)   # user 0 for firmware < v4 and use 1 f
 myRobot.debug = True  # Enable / Disable debug output on screen, by default disabled
 myRobot.connect()
 myRobot.mode(0)   # Set mode to Normal
-
 time.sleep(1)
 
 # Move robot, command will complete when motion is completed
-myRobot.goto(200,0,20,60)
+myRobot.get_coor()
+print ("X: {}  Y:{}  Z:{}".format(myRobot.X, myRobot.Y, myRobot.Z))
+myRobot.goto(myRobot.X, myRobot.Y, 150,20)
+time.sleep(1)
 print ("Releasing motors")
 myRobot.motors_on(False)
 
@@ -39,11 +41,9 @@ while (p <= totalP):
 # Disconnecting and reconnecting. If you just turn motors back on, the movement does not seem to work
 
 raw_input ("Place uArm in middle and press enter to start repeat sequence")
-myRobot.disconnect()
-time.sleep(1)
-myRobot.connect()
-time.sleep(1)
-myRobot.goto(200,0,200,speed)
+
+myRobot.motors_on(True)
+myRobot.goto(200,0,150,speed)
 time.sleep(1)
 
 while True:

@@ -64,7 +64,7 @@ class robot:
                 self.limit = True
             if line.startswith("@6 N0 V0"):
                 self.limit = False
-            #print (line)
+            
                         
         except Exception as e:
             if (self.debug): print ("Error trying to connect to: " + self.serialport + " - " + str(e))
@@ -165,13 +165,18 @@ class robot:
 
     def motors_on(self, state):
         if state == True:
-            cmd= protocol.ATTACH_MOTORS
-            self.sendcmd(cmd, True)
+            #Enabling seems to break the movement of the uArm (v4)
+            #So disconnecting and reconnecting instead
+            #cmd= protocol.ATTACH_MOTORS
+            #self.sendcmd(cmd, True)
+            self.disconnect()
+            time.sleep(1)
+            self.connect()
+            time.sleep(1)
         if state == False:
             cmd= protocol.DETACH_MOTORS
             self.sendcmd(cmd, True)
             
-
     @staticmethod
     def PointsInCircum(r,n):
         return [(math.cos(2*pi/n*x)*r,math.sin(2*pi/n*x)*r) for x in xrange(0,n+1)]
