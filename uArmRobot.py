@@ -165,14 +165,9 @@ class robot:
 
     def motors_on(self, state):
         if state == True:
-            #Enabling seems to break the movement of the uArm (v4)
-            #So disconnecting and reconnecting instead
-            #cmd= protocol.ATTACH_MOTORS
-            #self.sendcmd(cmd, True)
-            self.disconnect()
-            time.sleep(1)
-            self.connect()
-            time.sleep(1)
+            # Need firmware 4.1.1 or higher!
+            cmd= protocol.ATTACH_MOTORS
+            self.sendcmd(cmd, True)   
         if state == False:
             cmd= protocol.DETACH_MOTORS
             self.sendcmd(cmd, True)
